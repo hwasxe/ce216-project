@@ -1,15 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
 
-<BorderPane xmlns="http://javafx.com/javafx/21.0.7"
+<BorderPane xmlns="http://javafx.com/javafx/17"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.hapc.FXMLController">
 
     <top>
-        <Label text="Historical Artifact Catalog"
-               style="-fx-font-size: 20px; -fx-padding: 10px;"
-               BorderPane.alignment="CENTER"/>
+        <VBox spacing="10" style="-fx-padding: 10px;">
+            <Label text="Historical Artifact Catalog"
+                   style="-fx-font-size: 20px;"
+                   BorderPane.alignment="CENTER"/>
+
+            <!-- Add search field -->
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="Search:"/>
+                <TextField fx:id="searchField" promptText="Search artifacts..." HBox.hgrow="ALWAYS"/>
+            </HBox>
+
+            <!-- Add tags filter area -->
+            <VBox spacing="5">
+                <Label text="Filter by Tags:"/>
+                <ScrollPane fitToWidth="true" maxHeight="100">
+                    <FlowPane fx:id="tagsContainer" hgap="5" vgap="5">
+                        <padding>
+                            <Insets top="5" right="5" bottom="5" left="5"/>
+                        </padding>
+                    </FlowPane>
+                </ScrollPane>
+            </VBox>
+        </VBox>
     </top>
 
     <center>

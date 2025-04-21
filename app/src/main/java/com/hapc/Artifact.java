@@ -67,6 +67,11 @@ public class Artifact {
 
     @Override
     public String toString() {
-        return artifactId + " (" + artifactName + ", " + category + ")";
+        String name = artifactName != null && !artifactName.isEmpty() ? artifactName : "Unnamed";
+        String civ = civilization != null && !civilization.isEmpty() ? civilization : "Unknown";
+        String cat = category != null && !category.isEmpty() ? category : "Uncategorized";
+        String comp = composition != null && !composition.isEmpty() ? composition : "Unknown material";
+
+        return name + " (" + civ + " " + cat + ", " + comp + ")";
     }
 }
