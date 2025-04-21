@@ -8,11 +8,11 @@ public class JSONManager {
 
     private static final File file = new File("catalog.json");
 
-    public static void save(List<com.hapc.Artifact> artifacts) throws IOException {
+    public static void save(List<Artifact> artifacts) throws IOException {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             writer.write("[\n");
             for (int i = 0; i < artifacts.size(); i++) {
-                com.hapc.Artifact a = artifacts.get(i);
+                Artifact a = artifacts.get(i);
                 writer.write("  {\n");
                 writer.write("    \"artifactId\": \"" + a.getArtifactId() + "\",\n");
                 writer.write("    \"artifactName\": \"" + a.getArtifactName() + "\",\n");
@@ -24,15 +24,15 @@ public class JSONManager {
                 writer.write("    \"currentPlace\": \"" + a.getCurrentPlace() + "\",\n");
                 writer.write("    \"dimensions\": \"" + a.getDimensions() + "\",\n");
                 writer.write("    \"weight\": \"" + a.getWeight() + "\",\n");
-                writer.write("    \"tags\": \"" + a.getTags() + "\",\n");
+                writer.write("    \"tags\": \"" + a.getTags() + "\"\n");
                 writer.write("  }" + (i < artifacts.size() - 1 ? "," : "") + "\n");
             }
             writer.write("]");
         }
     }
 
-    public static List<com.hapc.Artifact> load() throws IOException {
-        List<com.hapc.Artifact> list = new ArrayList<>();
+    public static List<Artifact> load() throws IOException {
+        List<Artifact> list = new ArrayList<>();
         if (!file.exists()) return list;
 
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
@@ -61,7 +61,7 @@ public class JSONManager {
                 String weight = extract(item, "weight");
                 String tags = extract(item, "tags");
 
-                list.add(new com.hapc.Artifact(artifactId, artifactName, category, civilization,discoveryLocation,
+                list.add(new Artifact(artifactId, artifactName, category, civilization,discoveryLocation,
                         composition, discoveryDate,currentPlace,dimensions,weight,tags));
             }
         }
