@@ -17,9 +17,50 @@
     </center>
 
     <bottom>
-        <HBox spacing="10" alignment="CENTER" style="-fx-padding: 10px;">
-            <Button text="Add Artifact" fx:id="addButton"/>
-            <Button text="Save to JSON" fx:id="saveButton"/>
-        </HBox>
+        <VBox>
+            <GridPane hgap="10" vgap="5" style="-fx-padding: 10;">
+                <Label text="ArtifactID:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                <TextField fx:id="artifactIdField" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+                <Label text="ArtifactName:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                <TextField fx:id="artifactNameField" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+                <Label text="Category:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                <TextField fx:id="categoryField" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+                <Label text="Civilization:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+                <TextField fx:id="civilizationField" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+                <Label text="discoveryLocation:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+                <TextField fx:id="discoveryLocationField" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+
+                <Label text="composition:" GridPane.rowIndex="5" GridPane.columnIndex="0"/>
+                <TextField fx:id="compositionField" GridPane.rowIndex="5" GridPane.columnIndex="1"/>
+
+                <Label text="discoveryDate:" GridPane.rowIndex="6" GridPane.columnIndex="0"/>
+                <TextField fx:id="discoveryDateField" GridPane.rowIndex="6" GridPane.columnIndex="1"/>
+
+                <Label text="currentPlace:" GridPane.rowIndex="7" GridPane.columnIndex="0"/>
+                <TextField fx:id="currentPlaceField" GridPane.rowIndex="7" GridPane.columnIndex="1"/>
+
+                <Label text="dimensions:" GridPane.rowIndex="8" GridPane.columnIndex="0"/>
+                <TextField fx:id="dimensionsField" GridPane.rowIndex="8" GridPane.columnIndex="1"/>
+
+                <Label text="weight:" GridPane.rowIndex="9" GridPane.columnIndex="0"/>
+                <TextField fx:id="weightField" GridPane.rowIndex="9" GridPane.columnIndex="1"/>
+
+                <Label text="tags:" GridPane.rowIndex="10" GridPane.columnIndex="0"/>
+                <TextField fx:id="tagsField" GridPane.rowIndex="10" GridPane.columnIndex="1"/>
+
+            </GridPane>
+
+            <HBox spacing="10" style="-fx-padding: 10;">
+                <Button text="Add" fx:id="addButton"/>
+                <Button text="Edit" fx:id="editButton"/>
+                <Button text="Delete" fx:id="deleteButton"/>
+                <Button text="Save" fx:id="saveButton"/>
+            </HBox>
+        </VBox>
     </bottom>
+
 </BorderPane>

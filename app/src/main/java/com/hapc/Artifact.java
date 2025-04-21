@@ -67,6 +67,8 @@ public class Artifact {
 
     @Override
     public String toString() {
-        return artifactId + " (" + artifactName + ", " + category + ")";
+        return "ArtifactId:" + artifactId + " , artifactName:"+ artifactName + " , category:" + category + " , civilization:" + civilization +
+                " , discoveryLocation:" +  discoveryLocation + " , composition:" +  composition + " , discoveryDate:" +  discoveryDate +
+                " , currentPlace:" +  currentPlace + " , dimensions:" +  dimensions + " , weight:" +  weight + " , tags:" +  tags;
     }
 }
