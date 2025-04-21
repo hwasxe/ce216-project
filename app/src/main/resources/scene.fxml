@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21.0.7"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.hapc.FXMLController">
+
+    <top>
+        <Label text="Historical Artifact Catalog"
+               style="-fx-font-size: 20px; -fx-padding: 10px;"
+               BorderPane.alignment="CENTER"/>
+    </top>
+
+    <center>
+        <ListView fx:id="artifactListView"/>
+    </center>
+
+    <bottom>
+        <HBox spacing="10" alignment="CENTER" style="-fx-padding: 10px;">
+            <Button text="Add Artifact" fx:id="addButton"/>
+            <Button text="Save to JSON" fx:id="saveButton"/>
+        </HBox>
+    </bottom>
+</BorderPane>
