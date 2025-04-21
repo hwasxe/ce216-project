@@ -32,8 +32,9 @@ public class FXMLController {
         }
 
         addButton.setOnAction(event -> {
-            com.hapc.Artifact newArtifact = new com.hapc.Artifact("A" + (artifacts.size() + 1),
-                    "New Artifact", "Description", "Era", "Origin");
+            com.hapc.Artifact newArtifact = new com.hapc.Artifact("artifact ID" + (artifacts.size() + 1),
+                    "artifact Name", "category", "civilization", "discoveryLocation",
+                    "composition","discoveryDate","currentPlace", "dimensions","weight","tags");
             artifacts.add(newArtifact);
         });
 

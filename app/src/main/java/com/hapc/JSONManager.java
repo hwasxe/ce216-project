@@ -14,11 +14,17 @@ public class JSONManager {
             for (int i = 0; i < artifacts.size(); i++) {
                 com.hapc.Artifact a = artifacts.get(i);
                 writer.write("  {\n");
-                writer.write("    \"id\": \"" + a.getArtifactId() + "\",\n");
-                writer.write("    \"name\": \"" + a.getArtifactName() + "\",\n");
-                writer.write("    \"description\": \"" + a.getCategory() + "\",\n");
-                writer.write("    \"era\": \"" + a.getCivizilation() + "\",\n");
-                writer.write("    \"origin\": \"" + a.getDiscoveryLocation() + "\"\n");
+                writer.write("    \"artifactId\": \"" + a.getArtifactId() + "\",\n");
+                writer.write("    \"artifactName\": \"" + a.getArtifactName() + "\",\n");
+                writer.write("    \"category\": \"" + a.getCategory() + "\",\n");
+                writer.write("    \"civilization\": \"" + a.getCivilization() + "\",\n");
+                writer.write("    \"discoveryLocation\": \"" + a.getDiscoveryLocation() + "\",\n");
+                writer.write("    \"composition\": \"" + a.getComposition() + "\",\n");
+                writer.write("    \"discoveryDate\": \"" + a.getDiscoveryDate() + "\",\n");
+                writer.write("    \"currentPlace\": \"" + a.getCurrentPlace() + "\",\n");
+                writer.write("    \"dimensions\": \"" + a.getDimensions() + "\",\n");
+                writer.write("    \"weight\": \"" + a.getWeight() + "\",\n");
+                writer.write("    \"tags\": \"" + a.getTags() + "\",\n");
                 writer.write("  }" + (i < artifacts.size() - 1 ? "," : "") + "\n");
             }
             writer.write("]");
@@ -43,16 +49,22 @@ public class JSONManager {
             String[] items = data.split("###");
 
             for (String item : items) {
-                String id = extract(item, "id");
-                String name = extract(item, "name");
-                String desc = extract(item, "description");
-                String era = extract(item, "era");
-                String origin = extract(item, "origin");
+                String artifactId = extract(item, "artifactId");
+                String artifactName = extract(item, "artifactName");
+                String category = extract(item, "category");
+                String civilization = extract(item, "civilization");
+                String discoveryLocation = extract(item, "discoveryLocation");
+                String composition = extract(item, "composition");
+                String discoveryDate = extract(item, "discoveryDate");
+                String currentPlace = extract(item, "currentPlace");
+                String dimensions = extract(item, "dimensions");
+                String weight = extract(item, "weight");
+                String tags = extract(item, "tags");
 
-                list.add(new com.hapc.Artifact(id, name, desc, era, origin));
+                list.add(new com.hapc.Artifact(artifactId, artifactName, category, civilization,discoveryLocation,
+                        composition, discoveryDate,currentPlace,dimensions,weight,tags));
             }
         }
-
         return list;
     }
 
@@ -66,3 +78,5 @@ public class JSONManager {
         return "";
     }
 }
+
+
