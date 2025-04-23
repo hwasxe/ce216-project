@@ -69,11 +69,16 @@ public class JSONManager {
     }
 
     private static String extract(String json, String key) {
-        String pattern = "\"" + key + "\":\\s*\"";
-        int start = json.indexOf(pattern) + pattern.length();
-        int end = json.indexOf("\"", start);
-        if (start >= pattern.length() && end > start) {
-            return json.substring(start, end);
+        try {
+            String regex = "\"" + key + "\"\\s*:\\s*\"(.*?)\"";
+            java.util.regex.Pattern pattern = java.util.regex.Pattern.compile(regex);
+            java.util.regex.Matcher matcher = pattern.matcher(json);
+            if (matcher.find()) {
+                return matcher.group(1);
+            }
+        } catch (Exception e) {
+            System.err.println("Extract error for key: " + key);
+            e.printStackTrace();
         }
         return "";
     }
