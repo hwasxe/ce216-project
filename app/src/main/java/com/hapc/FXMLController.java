@@ -210,8 +210,16 @@ public class FXMLController {
             List<Artifact> filtered = allArtifacts.stream().filter(a ->
                     a.getArtifactId().toLowerCase().contains(keyword) ||
                             a.getArtifactName().toLowerCase().contains(keyword) ||
+                            a.getCategory().toLowerCase().contains(keyword) ||
                             a.getCivilization().toLowerCase().contains(keyword) ||
-                            a.getCategory().toLowerCase().contains(keyword)
+                            a.getDiscoveryLocation().toLowerCase().contains(keyword) ||
+                            a.getComposition().toLowerCase().contains(keyword) ||
+                            a.getDiscoveryDate().toLowerCase().contains(keyword) ||
+                            a.getCurrentPlace().toLowerCase().contains(keyword) ||
+                            a.getDimensions().toLowerCase().contains(keyword) ||
+                            a.getWeight().toLowerCase().contains(keyword) ||
+                            a.getTags().toLowerCase().contains(keyword)
+
             ).toList();
             artifacts.setAll(filtered);
         }
