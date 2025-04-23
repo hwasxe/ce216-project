@@ -1,4 +1,4 @@
-package com.hapc;
+package com.hacp;
 
 public class Artifact {
     private String artifactId;

@@ -46,5 +46,5 @@ jlink {
 
 application {
     // Define the main class for the application.
-    mainClass = 'com.hapc.MainApp'
+    mainClass = 'com.hacp.MainApp'
 }

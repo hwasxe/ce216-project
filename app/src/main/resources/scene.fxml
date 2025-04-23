@@ -4,7 +4,7 @@
 
 <BorderPane xmlns="http://javafx.com/javafx/21.0.7"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.hapc.FXMLController">
+            fx:controller="com.hacp.FXMLController">
 
     <top>
         <Label text="Historical Artifact Catalog"
