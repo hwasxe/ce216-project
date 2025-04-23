@@ -18,7 +18,7 @@ public class MainApp extends Application {
 
     }
     public String getGreeting() {
-        return "Hello World!";
+        return "Welcome to Historical Artifact Catalog";
     }
 
     public static void main(String[] args) {

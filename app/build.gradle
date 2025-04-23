@@ -9,6 +9,7 @@ plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
     id 'application'
     id 'org.openjfx.javafxplugin' version '0.1.0'
+    id("org.beryx.jlink") version "3.1.1"
 }
 
 repositories {
@@ -34,6 +35,13 @@ java {
 javafx {
     version = "21.0.7"
     modules = [ 'javafx.controls', 'javafx.fxml']
+}
+
+jlink {
+    options = ['--strip-debug', '--compress', '2', '--no-header-files', '--no-man-pages']
+    launcher {
+        name = 'CatalogApp'
+    }
 }
 
 application {
