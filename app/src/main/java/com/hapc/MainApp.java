@@ -11,7 +11,7 @@ public class MainApp extends Application {
     public void start(Stage stage) throws Exception {
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/scene.fxml"));
-        Scene scene = new Scene(loader.load(), 800, 600);
+        Scene scene = new Scene(loader.load(), 1250, 800);
         stage.setTitle("Historical Artifact Catalog");
         stage.setScene(scene);
         stage.show();
