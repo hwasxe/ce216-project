@@ -7,9 +7,25 @@
             fx:controller="com.hacp.FXMLController">
 
     <top>
-        <Label text="Historical Artifact Catalog"
-               style="-fx-font-size: 20px; -fx-padding: 10px;"
-               BorderPane.alignment="CENTER"/>
+        <VBox>
+            <MenuBar>
+                <menus>
+                    <Menu text="File">
+                        <items>
+                            <MenuItem text="Exit" onAction="#handleExit"/>
+                        </items>
+                    </Menu>
+                    <Menu text="Help">
+                        <items>
+                            <MenuItem text="User Manual" onAction="#showHelp"/>
+                        </items>
+                    </Menu>
+                </menus>
+            </MenuBar>
+            <Label text="Historical Artifact Catalog"
+                   style="-fx-font-size: 20px; -fx-padding: 10px;"
+                   BorderPane.alignment="CENTER"/>
+        </VBox>
     </top>
 
     <center>
