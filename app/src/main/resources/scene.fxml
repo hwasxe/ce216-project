@@ -12,6 +12,8 @@
                 <menus>
                     <Menu text="File">
                         <items>
+                            <MenuItem text="Import JSON" onAction="#handleImport"/>
+                            <MenuItem text="Export JSON" onAction="#handleExport"/>
                             <MenuItem text="Exit" onAction="#handleExit"/>
                         </items>
                     </Menu>

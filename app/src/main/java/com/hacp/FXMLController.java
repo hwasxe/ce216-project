@@ -17,6 +17,13 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Priority;
+import javafx.stage.FileChooser;
+import javafx.scene.control.Alert;
+import java.io.File;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
 
 import java.util.List;
 
@@ -352,5 +359,91 @@ public class FXMLController {
         Scene scene = new Scene(content);
         helpStage.setScene(scene);
         helpStage.show();
+    }
+    @FXML
+    private void handleImport() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Import JSON File");
+        fileChooser.getExtensionFilters().add(
+                new FileChooser.ExtensionFilter("JSON Files", "*.json"));
+
+        File selectedFile = fileChooser.showOpenDialog(artifactTable.getScene().getWindow());
+
+        if (selectedFile != null) {
+            try {
+                artifacts.clear();
+                allArtifacts.clear();
+
+                BufferedReader reader = new BufferedReader(new FileReader(selectedFile));
+                StringBuilder jsonContent = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    jsonContent.append(line);
+                }
+                reader.close();
+
+                BufferedWriter writer = new BufferedWriter(new FileWriter("catalog.json"));
+                writer.write(jsonContent.toString());
+                writer.close();
+
+                List<Artifact> loaded = JSONManager.load();
+                allArtifacts.addAll(loaded);
+                artifacts.addAll(loaded);
+                artifactTable.refresh();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                showAlert("Error", "Failed to import artifacts from the selected file.");
+            }
+        }
+    }
+
+    @FXML
+    private void handleExport() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Export JSON File");
+        fileChooser.getExtensionFilters().add(
+                new FileChooser.ExtensionFilter("JSON Files", "*.json"));
+        fileChooser.setInitialFileName("artifacts.json");
+
+        File selectedFile = fileChooser.showSaveDialog(artifactTable.getScene().getWindow());
+
+        if (selectedFile != null) {
+            try {
+                BufferedWriter writer = new BufferedWriter(new FileWriter(selectedFile));
+                writer.write("[\n");
+                for (int i = 0; i < allArtifacts.size(); i++) {
+                    Artifact a = allArtifacts.get(i);
+                    writer.write("  {\n");
+                    writer.write("    \"artifactId\": \"" + a.getArtifactId() + "\",\n");
+                    writer.write("    \"artifactName\": \"" + a.getArtifactName() + "\",\n");
+                    writer.write("    \"category\": \"" + a.getCategory() + "\",\n");
+                    writer.write("    \"civilization\": \"" + a.getCivilization() + "\",\n");
+                    writer.write("    \"discoveryLocation\": \"" + a.getDiscoveryLocation() + "\",\n");
+                    writer.write("    \"composition\": \"" + a.getComposition() + "\",\n");
+                    writer.write("    \"discoveryDate\": \"" + a.getDiscoveryDate() + "\",\n");
+                    writer.write("    \"currentPlace\": \"" + a.getCurrentPlace() + "\",\n");
+                    writer.write("    \"dimensions\": \"" + a.getDimensions() + "\",\n");
+                    writer.write("    \"weight\": \"" + a.getWeight() + "\",\n");
+                    writer.write("    \"tags\": \"" + a.getTags() + "\"\n");
+                    writer.write("  }" + (i < allArtifacts.size() - 1 ? "," : "") + "\n");
+                }
+                writer.write("]");
+                writer.close();
+
+                showAlert("Success", "Artifacts successfully exported to " + selectedFile.getName());
+            } catch (Exception e) {
+                e.printStackTrace();
+                showAlert("Error", "Failed to export artifacts to the selected file.");
+            }
+        }
+    }
+
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }
