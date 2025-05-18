@@ -9,14 +9,12 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.control.TextArea;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
 import javafx.scene.control.Label;
-import javafx.scene.layout.Priority;
 import javafx.stage.FileChooser;
 import javafx.scene.control.Alert;
 import java.io.File;
@@ -24,8 +22,16 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.ArrayList;
+import javafx.stage.Modality;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.control.CheckBox;
 
 import java.util.List;
+
 
 public class FXMLController {
 
@@ -120,6 +126,12 @@ public class FXMLController {
     private Button cancelButton;
 
     @FXML
+    private Button tagFilterButton;
+
+    @FXML
+    private Label activeFiltersLabel;
+
+    @FXML
     private VBox formPanel;
 
     @FXML
@@ -181,6 +193,8 @@ public class FXMLController {
             }
         });
 
+        setupTagFilterButton();
+
         deleteButton.setOnAction(event -> {
             Artifact selected = artifactTable.getSelectionModel().getSelectedItem();
             if (selected != null) {
@@ -217,6 +231,7 @@ public class FXMLController {
         });
     }
 
+
     private void performSearch() {
         String keyword = searchField.getText().toLowerCase().trim();
         if (keyword.isEmpty()) {
@@ -238,6 +253,99 @@ public class FXMLController {
             ).toList();
             artifacts.setAll(filtered);
         }
+    }
+
+    private Set<String> extractAllTags() {
+        Set<String> allTags = new HashSet<>();
+
+        for (Artifact artifact : allArtifacts) {
+            String tagString = artifact.getTags();
+            if (tagString != null && !tagString.isEmpty()) {
+                String[] tags = tagString.split(",");
+                for (String tag : tags) {
+                    String trimmedTag = tag.trim();
+                    if (!trimmedTag.isEmpty()) {
+                        allTags.add(trimmedTag);
+                    }
+                }
+            }
+        }
+
+        return allTags;
+    }
+
+    private void setupTagFilterButton() {
+        tagFilterButton.setOnAction(event -> showTagFilterDialog());
+    }
+
+    private void showTagFilterDialog() {
+        Stage dialog = new Stage();
+        dialog.setTitle("Filter by Tags");
+        dialog.initModality(Modality.APPLICATION_MODAL);
+
+        VBox content = new VBox(10);
+        content.setPadding(new Insets(20));
+        content.setPrefWidth(300);
+
+        Label instructions = new Label("Select tags to filter artifacts:");
+
+        Set<String> allTags = extractAllTags();
+        List<CheckBox> checkBoxes = new ArrayList<>();
+
+        for (String tag : allTags) {
+            CheckBox cb = new CheckBox(tag);
+            checkBoxes.add(cb);
+            content.getChildren().add(cb);
+        }
+
+        HBox buttonBox = new HBox(10);
+        buttonBox.setAlignment(Pos.CENTER_RIGHT);
+
+        Button applyButton = new Button("Apply Filter");
+        Button cancelButton = new Button("Cancel");
+
+        buttonBox.getChildren().addAll(cancelButton, applyButton);
+
+        applyButton.setOnAction(e -> {
+            Set<String> selectedTags = new HashSet<>();
+            for (CheckBox cb : checkBoxes) {
+                if (cb.isSelected()) {
+                    selectedTags.add(cb.getText());
+                }
+            }
+
+            if (selectedTags.isEmpty()) {
+                artifacts.setAll(allArtifacts);
+                activeFiltersLabel.setText("Active filters: None");
+            } else {
+                List<Artifact> filtered = allArtifacts.stream().filter(a -> {
+                    String artifactTags = a.getTags();
+                    if (artifactTags == null || artifactTags.isEmpty()) {
+                        return false;
+                    }
+
+                    for (String tag : selectedTags) {
+                        if (artifactTags.toLowerCase().contains(tag.toLowerCase())) {
+                            return true;
+                        }
+                    }
+                    return false;
+                }).toList();
+
+                artifacts.setAll(filtered);
+                activeFiltersLabel.setText("Active filters: " + String.join(", ", selectedTags));
+            }
+
+            dialog.close();
+        });
+
+        cancelButton.setOnAction(e -> dialog.close());
+
+        content.getChildren().add(buttonBox);
+
+        Scene scene = new Scene(content);
+        dialog.setScene(scene);
+        dialog.showAndWait();
     }
 
     private void showForm(boolean show) {

@@ -33,8 +33,10 @@
     <center>
         <VBox spacing="10" style="-fx-padding: 10;">
             <HBox spacing="10" alignment="CENTER_LEFT">
-                <TextField fx:id="searchField" promptText="Search by tags..." HBox.hgrow="ALWAYS"/>
+                <TextField fx:id="searchField" promptText="Search..." HBox.hgrow="ALWAYS"/>
                 <Button text="Search" fx:id="searchButton"/>
+                <Button text="Filter by Tags" fx:id="tagFilterButton"/>
+                <Label fx:id="activeFiltersLabel" text="Active filters: None" />
             </HBox>
 
             <TableView fx:id="artifactTable" VBox.vgrow="ALWAYS">
