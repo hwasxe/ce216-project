@@ -22,10 +22,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 
 public class FXMLController {
@@ -119,12 +116,6 @@ public class FXMLController {
 
     @FXML
     private Button cancelButton;
-
-    @FXML
-    private Button importButton;
-
-    @FXML
-    private Button exportButton;
 
     @FXML
     private Button tagFilterButton;
@@ -221,7 +212,7 @@ public class FXMLController {
             File selectedFile = fileChooser.showOpenDialog(null);
 
             if (selectedFile != null) {
-                File imagesDir = new File(System.getProperty("user.dir") + "/src/images");
+                File imagesDir = new File(System.getProperty("user.dir") + "/src/main/resources/images");
                 System.out.println("images dizini oluşturuldu: " + imagesDir.getAbsolutePath());
 
                 if (!imagesDir.exists()) {
@@ -231,7 +222,7 @@ public class FXMLController {
                 File destFile = new File(imagesDir, selectedFile.getName());
                 try {
                     Files.copy(selectedFile.toPath(), destFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-                    selectedImagePath = "src/images/" + selectedFile.getName();
+                    selectedImagePath = "src/main/resources/images/" + selectedFile.getName();
                     imagePathLabel.setText("Selected: " + selectedFile.getName());
                 } catch (IOException ex) {
                     ex.printStackTrace();
@@ -584,19 +575,31 @@ public class FXMLController {
         layout.getChildren().addAll(idLabel, nameLabel, categoryLabel, civLabel, locLabel, composition, discoveryDate,
                 currentPlace, dimensions, weight, tags);
 
-        if (artifact.getImagePath() != null && !artifact.getImagePath().isEmpty()) {
-            File imgFile = new File(System.getProperty("user.dir"), artifact.getImagePath());
-            if (imgFile.exists()) {
-                Image image = new Image(imgFile.toURI().toString());
-                ImageView imageView = new ImageView(image);
-                imageView.setFitHeight(200);
-                imageView.setPreserveRatio(true);
-                layout.getChildren().add(imageView);
+        Image image;
+
+        try {
+            if (artifact.getImagePath() != null && !artifact.getImagePath().isEmpty()) {
+                File imageFile = new File(artifact.getImagePath());
+
+                if (imageFile.exists()) {
+                    image = new Image(imageFile.toURI().toString());
+                } else {
+                    throw new Exception("User image not found");
+                }
             } else {
-                System.out.println("Imahe couldnt not be found: " + imgFile.getAbsolutePath());
+                throw new Exception("No user image set");
             }
+        } catch (Exception ex) {
+            // Fallback: load placeholder from resources
+            image = new Image(getClass().getResource("/images/placeholder.png").toExternalForm());
         }
 
+        ImageView imageView = new ImageView(image);
+        imageView.setFitHeight(200);
+        imageView.setPreserveRatio(true);
+        layout.getChildren().add(imageView);
+
+        
         Scene scene = new Scene(layout, 500, 600);
         detailStage.setScene(scene);
         detailStage.initModality(Modality.APPLICATION_MODAL); // focus'u kilitle

@@ -1,0 +1,27 @@
+[ {
+  "artifactId" : "AA001",
+  "artifactName" : "Alexander Sarcophagus",
+  "category" : "Sarcophagus",
+  "civilization" : "Hellenistic",
+  "discoveryLocation" : "Sidon, Lebanon",
+  "composition" : "Marble",
+  "discoveryDate" : "1887",
+  "currentPlace" : "Istanbul Archaeology Museum",
+  "dimensions" : "215cm x 95cm x 130cm",
+  "weight" : "~1.5 tons",
+  "tags" : "alexander the great, sarcophagus, hellenistic art",
+  "imagePath" : "src/main/resources/images/Alexander_Sarcophagus.jpg"
+}, {
+  "artifactId" : "",
+  "artifactName" : "",
+  "category" : "",
+  "civilization" : "",
+  "discoveryLocation" : "",
+  "composition" : "",
+  "discoveryDate" : "",
+  "currentPlace" : "",
+  "dimensions" : "",
+  "weight" : "",
+  "tags" : "",
+  "imagePath" : "images/Alexander_Sarcophagus.jpg"
+} ]
