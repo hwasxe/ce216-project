@@ -25,6 +25,7 @@ public class JSONManager {
                 writer.write("    \"dimensions\": \"" + a.getDimensions() + "\",\n");
                 writer.write("    \"weight\": \"" + a.getWeight() + "\",\n");
                 writer.write("    \"tags\": \"" + a.getTags() + "\"\n");
+                writer.write("    \"imagePath\": \"" + a.getImagePath() + "\"\n");
                 writer.write("  }" + (i < artifacts.size() - 1 ? "," : "") + "\n");
             }
             writer.write("]");
@@ -60,9 +61,11 @@ public class JSONManager {
                 String dimensions = extract(item, "dimensions");
                 String weight = extract(item, "weight");
                 String tags = extract(item, "tags");
+                String imagePath = extract(item, "imagePath");
 
                 list.add(new Artifact(artifactId, artifactName, category, civilization,discoveryLocation,
-                        composition, discoveryDate,currentPlace,dimensions,weight,tags));
+                        composition, discoveryDate,currentPlace,dimensions,weight,tags, imagePath));
+
             }
         }
         return list;

@@ -54,6 +54,12 @@
                     <Label text="Artifact Name:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
                     <TextField fx:id="artifactNameField" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
 
+                    <Label text="Select Image:" GridPane.rowIndex="11" GridPane.columnIndex="0"/>
+                    <Button text="Select Image" fx:id="imageSelectButton" GridPane.rowIndex="11" GridPane.columnIndex="1"/>
+                    <Label fx:id="imagePathLabel"
+                           text="No image selected"
+                           GridPane.rowIndex="12"
+                           GridPane.columnIndex="1" />
                     <Label text="Category:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
                     <TextField fx:id="categoryField" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
 

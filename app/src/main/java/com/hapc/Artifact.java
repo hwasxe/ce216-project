@@ -13,12 +13,14 @@ public class Artifact {
     private String weight;
     private String tags;
 
+    private String imagePath;
+
     //for JSON
     public Artifact() {
     }
 
     public Artifact(String artifactId, String artifactName, String category, String civilization, String discoveryLocation, String composition,
-                    String discoveryDate, String currentPlace, String dimensions, String weight, String tags) {
+                    String discoveryDate, String currentPlace, String dimensions, String weight, String tags, String imagePath) {
         this.artifactId = artifactId;
         this.artifactName = artifactName;
         this.category = category;
@@ -30,6 +32,7 @@ public class Artifact {
         this.dimensions = dimensions;
         this.weight = weight;
         this.tags = tags;
+        this.imagePath = imagePath;
     }
 
     public String getArtifactId() { return artifactId; }
@@ -65,10 +68,18 @@ public class Artifact {
     public String getTags() { return tags; }
     public void setTags(String tags) { this.tags = tags; }
 
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
+    }
+
     @Override
     public String toString() {
         return "ArtifactId:" + artifactId + " , artifactName:"+ artifactName + " , category:" + category + " , civilization:" + civilization +
                 " , discoveryLocation:" +  discoveryLocation + " , composition:" +  composition + " , discoveryDate:" +  discoveryDate +
-                " , currentPlace:" +  currentPlace + " , dimensions:" +  dimensions + " , weight:" +  weight + " , tags:" +  tags;
+                " , currentPlace:" +  currentPlace + " , dimensions:" +  dimensions + " , weight:" +  weight + " , tags:" +  tags + " , image:" + imagePath;
     }
 }

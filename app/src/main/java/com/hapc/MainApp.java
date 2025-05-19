@@ -9,8 +9,9 @@ public class MainApp extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
+        System.out.println("FXML path: " + getClass().getClassLoader().getResource("scene.fxml"));
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/scene.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("scene.fxml"));
         Scene scene = new Scene(loader.load(), 1250, 800);
         stage.setTitle("Historical Artifact Catalog");
         stage.setScene(scene);
