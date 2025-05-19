@@ -13,6 +13,8 @@
                 <menus>
                     <Menu text="File">
                         <items>
+                            <MenuItem text="Import JSON" onAction="#importJson"/>
+                            <MenuItem text="Save as JSON" onAction="#saveJson"/>
                             <MenuItem text="Exit" onAction="#handleExit"/>
                         </items>
                     </Menu>

@@ -16,6 +16,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 
 import java.io.File;
 import java.io.IOException;
@@ -120,6 +121,12 @@ public class FXMLController {
     private Button cancelButton;
 
     @FXML
+    private Button importButton;
+
+    @FXML
+    private Button exportButton;
+
+    @FXML
     private Button tagFilterButton;
 
     @FXML
@@ -153,7 +160,6 @@ public class FXMLController {
             allArtifacts.addAll(loaded);
             artifacts.addAll(loaded);
             artifactTable.setItems(artifacts);
-            artifactBeingEdited.setImagePath(selectedImagePath);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -270,7 +276,9 @@ public class FXMLController {
             clearInputs();
             showForm(false);
         });
+
     }
+
 
 
     private void performSearch() {
@@ -455,6 +463,47 @@ public class FXMLController {
     }
 
     @FXML
+    private void importJson() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Import Artifact JSON");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JSON Files", "*.json"));
+
+        File file = fileChooser.showOpenDialog(getWindow());
+        if (file != null) {
+            try {
+                List<Artifact> imported = JSONManager.load(file);
+                allArtifacts.clear();
+                artifacts.clear();
+                allArtifacts.addAll(imported);
+                artifacts.addAll(imported);
+            } catch (Exception e) {
+                showAlert("Failed to import JSON:\n" + e.getMessage());
+            }
+        }
+    }
+
+    @FXML
+    private void saveJson() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Export Artifact JSON");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JSON Files", "*.json"));
+        fileChooser.setInitialFileName("artifact-catalog.json");
+
+        File file = fileChooser.showSaveDialog(getWindow());
+        if (file != null) {
+            try {
+                JSONManager.save(allArtifacts, file);
+            } catch (Exception e) {
+                showAlert("Failed to export JSON:\n" + e.getMessage());
+            }
+        }
+    }
+
+    private Window getWindow() {
+        return artifactTable.getScene().getWindow();
+    }
+
+    @FXML
     private void handleExit() {
         System.exit(0);
     }
@@ -556,9 +605,8 @@ public class FXMLController {
 
     }
 
-    private void showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(title);
+    private void showAlert(String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
