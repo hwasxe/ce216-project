@@ -12,7 +12,6 @@ public class Artifact {
     private String dimensions;
     private String weight;
     private String tags;
-
     private String imagePath;
 
     //for JSON

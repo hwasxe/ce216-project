@@ -10,6 +10,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
@@ -19,7 +21,10 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class FXMLController {
 
@@ -112,6 +117,12 @@ public class FXMLController {
     private TextField tagsField;
 
     @FXML
+    private Label activeFiltersLabel;
+
+    @FXML
+    private Button tagFilterButton;
+
+    @FXML
     private Button searchButton;
 
     @FXML
@@ -187,6 +198,8 @@ public class FXMLController {
 
             }
         });
+
+        setupTagFilterButton();
 
         deleteButton.setOnAction(event -> {
             Artifact selected = artifactTable.getSelectionModel().getSelectedItem();
@@ -273,11 +286,110 @@ public class FXMLController {
             List<Artifact> filtered = allArtifacts.stream().filter(a ->
                     a.getArtifactId().toLowerCase().contains(keyword) ||
                             a.getArtifactName().toLowerCase().contains(keyword) ||
+                            a.getCategory().toLowerCase().contains(keyword) ||
                             a.getCivilization().toLowerCase().contains(keyword) ||
-                            a.getCategory().toLowerCase().contains(keyword)
+                            a.getDiscoveryLocation().toLowerCase().contains(keyword) ||
+                            a.getComposition().toLowerCase().contains(keyword) ||
+                            a.getDiscoveryDate().toLowerCase().contains(keyword) ||
+                            a.getCurrentPlace().toLowerCase().contains(keyword) ||
+                            a.getDimensions().toLowerCase().contains(keyword) ||
+                            a.getWeight().toLowerCase().contains(keyword) ||
+                            a.getTags().toLowerCase().contains(keyword)
             ).toList();
             artifacts.setAll(filtered);
         }
+    }
+    private Set<String> extractAllTags() {
+        Set<String> allTags = new HashSet<>();
+
+        for (Artifact artifact : allArtifacts) {
+            String tagString = artifact.getTags();
+            if (tagString != null && !tagString.isEmpty()) {
+                String[] tags = tagString.split(",");
+                for (String tag : tags) {
+                    String trimmedTag = tag.trim();
+                    if (!trimmedTag.isEmpty()) {
+                        allTags.add(trimmedTag);
+                    }
+                }
+            }
+        }
+
+        return allTags;
+    }
+
+    private void setupTagFilterButton() {
+        tagFilterButton.setOnAction(event -> showTagFilterDialog());
+    }
+
+    private void showTagFilterDialog() {
+        Stage dialog = new Stage();
+        dialog.setTitle("Filter by Tags");
+        dialog.initModality(Modality.APPLICATION_MODAL);
+
+        VBox content = new VBox(10);
+        content.setPadding(new Insets(20));
+        content.setPrefWidth(300);
+
+        Label instructions = new Label("Select tags to filter artifacts:");
+
+        Set<String> allTags = extractAllTags();
+        List<CheckBox> checkBoxes = new ArrayList<>();
+
+        for (String tag : allTags) {
+            CheckBox cb = new CheckBox(tag);
+            checkBoxes.add(cb);
+            content.getChildren().add(cb);
+        }
+
+        HBox buttonBox = new HBox(10);
+        buttonBox.setAlignment(Pos.CENTER_RIGHT);
+
+        Button applyButton = new Button("Apply Filter");
+        Button cancelButton = new Button("Cancel");
+
+        buttonBox.getChildren().addAll(cancelButton, applyButton);
+
+        applyButton.setOnAction(e -> {
+            Set<String> selectedTags = new HashSet<>();
+            for (CheckBox cb : checkBoxes) {
+                if (cb.isSelected()) {
+                    selectedTags.add(cb.getText());
+                }
+            }
+
+            if (selectedTags.isEmpty()) {
+                artifacts.setAll(allArtifacts);
+                activeFiltersLabel.setText("Active filters: None");
+            } else {
+                List<Artifact> filtered = allArtifacts.stream().filter(a -> {
+                    String artifactTags = a.getTags();
+                    if (artifactTags == null || artifactTags.isEmpty()) {
+                        return false;
+                    }
+
+                    for (String tag : selectedTags) {
+                        if (artifactTags.toLowerCase().contains(tag.toLowerCase())) {
+                            return true;
+                        }
+                    }
+                    return false;
+                }).toList();
+
+                artifacts.setAll(filtered);
+                activeFiltersLabel.setText("Active filters: " + String.join(", ", selectedTags));
+            }
+
+            dialog.close();
+        });
+
+        cancelButton.setOnAction(e -> dialog.close());
+
+        content.getChildren().add(buttonBox);
+
+        Scene scene = new Scene(content);
+        dialog.setScene(scene);
+        dialog.showAndWait();
     }
 
     private void showForm(boolean show) {
@@ -386,6 +498,59 @@ public class FXMLController {
         detailStage.showAndWait();
 
 
+    }
+
+    @FXML
+    private void showHelp() {
+        Stage helpStage = new Stage();
+        helpStage.setTitle("User Manual");
+
+        VBox content = new VBox(10);
+        content.setStyle("-fx-padding: 20px;");
+        content.setPrefWidth(600);
+        content.setPrefHeight(400);
+
+        Label titleLabel = new Label("Historical Artifact Catalog - User Manual");
+        titleLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
+
+        TextArea helpText = new TextArea();
+        helpText.setEditable(false);
+        helpText.setWrapText(true);
+        helpText.setText(
+                "HISTORICAL ARTIFACT CATALOG APPLICATION\n\n" +
+                        "This application allows you to manage historical artifacts. Here's how to use it:\n\n" +
+                        "BASIC OPERATIONS:\n" +
+                        "- Add: Click the 'Add' button to create a new artifact entry\n" +
+                        "- Edit: Select an artifact from the table and click 'Edit'\n" +
+                        "- Delete: Select an artifact and click 'Delete' to remove it\n" +
+                        "- Save: Click 'Save' to save all changes to the catalog file\n\n" +
+                        "SEARCH:\n" +
+                        "- Use the search box at the top to filter artifacts by any field\n" +
+                        "- The search works across all properties including tags\n\n" +
+                        "ARTIFACT PROPERTIES:\n" +
+                        "- Artifact ID: A unique identifier for the artifact\n" +
+                        "- Artifact Name: The name or title of the artifact\n" +
+                        "- Category: The type (Sculpture, Manuscript, Weapon, Tool, Jewelry)\n" +
+                        "- Civilization: The civilization or culture that created the artifact\n" +
+                        "- Discovery Location: Where the artifact was found\n" +
+                        "- Composition: Material makeup (Gold, Clay, Papyrus, Stone, Wood, etc.)\n" +
+                        "- Discovery Date: When the artifact was discovered\n" +
+                        "- Current Place: Current location (museum, collection, etc.)\n" +
+                        "- Dimensions: Physical size of the artifact\n" +
+                        "- Weight: Weight of the artifact\n" +
+                        "- Tags: Keywords to categorize and search for artifacts"
+        );
+
+        VBox.setVgrow(helpText, Priority.ALWAYS);
+
+        Button closeButton = new Button("Close");
+        closeButton.setOnAction(e -> helpStage.close());
+
+        content.getChildren().addAll(titleLabel, helpText, closeButton);
+
+        Scene scene = new Scene(content);
+        helpStage.setScene(scene);
+        helpStage.show();
     }
 
 }
