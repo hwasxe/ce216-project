@@ -1,22 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.image.ImageView?>
 
 <BorderPane xmlns="http://javafx.com/javafx/21.0.7"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.hacp.FXMLController">
 
     <top>
-        <Label text="Historical Artifact Catalog"
-               style="-fx-font-size: 20px; -fx-padding: 10px;"
-               BorderPane.alignment="CENTER"/>
+        <VBox>
+            <MenuBar>
+                <menus>
+                    <Menu text="File">
+                        <items>
+                            <MenuItem text="Import JSON" onAction="#handleImport"/>
+                            <MenuItem text="Export JSON" onAction="#handleExport"/>
+                            <MenuItem text="Exit" onAction="#handleExit"/>
+                        </items>
+                    </Menu>
+                    <Menu text="Help">
+                        <items>
+                            <MenuItem text="User Manual" onAction="#showHelp"/>
+                        </items>
+                    </Menu>
+                </menus>
+            </MenuBar>
+            <Label text="Historical Artifact Catalog"
+                   style="-fx-font-size: 20px; -fx-padding: 10px;"
+                   BorderPane.alignment="CENTER"/>
+        </VBox>
     </top>
 
     <center>
         <VBox spacing="10" style="-fx-padding: 10;">
             <HBox spacing="10" alignment="CENTER_LEFT">
-                <TextField fx:id="searchField" promptText="Search by tags..." HBox.hgrow="ALWAYS"/>
+                <TextField fx:id="searchField" promptText="Search..." HBox.hgrow="ALWAYS"/>
                 <Button text="Search" fx:id="searchButton"/>
+                <Button text="Filter by Tags" fx:id="tagFilterButton"/>
+                <Label fx:id="activeFiltersLabel" text="Active filters: None" />
             </HBox>
 
             <TableView fx:id="artifactTable" VBox.vgrow="ALWAYS">
@@ -80,7 +101,17 @@
 
                     <Label text="Tags:" GridPane.rowIndex="10" GridPane.columnIndex="0"/>
                     <TextField fx:id="tagsField" GridPane.rowIndex="10" GridPane.columnIndex="1"/>
+                    <Label text="Image:" GridPane.rowIndex="11" GridPane.columnIndex="0"/>
+                    <HBox spacing="5" GridPane.rowIndex="11" GridPane.columnIndex="1">
+                        <TextField fx:id="imagePathField" editable="false" HBox.hgrow="ALWAYS"/>
+                        <Button fx:id="selectImageButton" text="Select Image"/>
+                    </HBox>
                 </GridPane>
+
+                <VBox fx:id="imagePreviewBox" alignment="CENTER" spacing="5" visible="false" managed="false">
+                    <Label text="Image Preview:"/>
+                    <ImageView fx:id="imagePreview" fitHeight="150.0" fitWidth="200.0" preserveRatio="true"/>
+                </VBox>
 
                 <HBox spacing="10" alignment="CENTER_RIGHT">
                     <Button text="Submit" fx:id="submitButton"/>
