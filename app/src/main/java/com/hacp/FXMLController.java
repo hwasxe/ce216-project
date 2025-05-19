@@ -29,6 +29,12 @@ import javafx.stage.Modality;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.CheckBox;
+import javafx.scene.image.ImageView;
+import javafx.scene.image.Image;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
 import java.util.List;
 
@@ -137,6 +143,19 @@ public class FXMLController {
     @FXML
     private TextField searchField;
 
+    @FXML
+    private TextField imagePathField;
+
+    @FXML
+    private Button selectImageButton;
+
+    @FXML
+    private VBox imagePreviewBox;
+
+    @FXML
+    private ImageView imagePreview;
+
+    private static final String IMAGE_DIR = "artifact_images";
 
     private final ObservableList<Artifact> artifacts = FXCollections.observableArrayList();
     private final ObservableList<Artifact> allArtifacts = FXCollections.observableArrayList();
@@ -194,6 +213,7 @@ public class FXMLController {
         });
 
         setupTagFilterButton();
+        setupImageSelection();
 
         deleteButton.setOnAction(event -> {
             Artifact selected = artifactTable.getSelectionModel().getSelectedItem();
@@ -365,6 +385,10 @@ public class FXMLController {
         dimensionsField.clear();
         weightField.clear();
         tagsField.clear();
+        imagePathField.clear();
+        imagePreview.setImage(null);
+        imagePreviewBox.setVisible(false);
+        imagePreviewBox.setManaged(false);
     }
 
     private void populateInputs(Artifact artifact) {
@@ -379,6 +403,8 @@ public class FXMLController {
         dimensionsField.setText(artifact.getDimensions());
         weightField.setText(artifact.getWeight());
         tagsField.setText(artifact.getTags());
+        imagePathField.setText(artifact.getImagePath());
+        displayImagePreview(artifact.getImagePath());
     }
 
     private Artifact createArtifactFromInputs() {
@@ -393,7 +419,8 @@ public class FXMLController {
                 currentPlaceField.getText(),
                 dimensionsField.getText(),
                 weightField.getText(),
-                tagsField.getText()
+                tagsField.getText(),
+                imagePathField.getText()
         );
     }
 
@@ -409,6 +436,7 @@ public class FXMLController {
         artifact.setDimensions(dimensionsField.getText());
         artifact.setWeight(weightField.getText());
         artifact.setTags(tagsField.getText());
+        artifact.setImagePath(imagePathField.getText());
     }
 
     @FXML
@@ -553,5 +581,71 @@ public class FXMLController {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+    private void ensureImageDirectoryExists() {
+        try {
+            Path path = Paths.get(IMAGE_DIR);
+            if (!Files.exists(path)) {
+                Files.createDirectory(path);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void setupImageSelection() {
+        ensureImageDirectoryExists();
+
+        selectImageButton.setOnAction(event -> {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Select Image");
+            fileChooser.getExtensionFilters().addAll(
+                    new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg", "*.gif")
+            );
+
+            File selectedFile = fileChooser.showOpenDialog(artifactTable.getScene().getWindow());
+            if (selectedFile != null) {
+                try {
+                    // Generate a unique file name based on timestamp
+                    String uniqueFileName = System.currentTimeMillis() + "_" + selectedFile.getName();
+                    Path destination = Paths.get(IMAGE_DIR, uniqueFileName);
+
+                    // Copy the image to our directory
+                    Files.copy(selectedFile.toPath(), destination, StandardCopyOption.REPLACE_EXISTING);
+
+                    // Set the path to the field
+                    imagePathField.setText(destination.toString());
+
+                    // Show image preview
+                    displayImagePreview(destination.toString());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    showAlert("Error", "Failed to copy the image file.");
+                }
+            }
+        });
+    }
+
+    private void displayImagePreview(String imagePath) {
+        if (imagePath != null && !imagePath.isEmpty()) {
+            try {
+                File file = new File(imagePath);
+                if (file.exists()) {
+                    Image image = new Image(file.toURI().toString());
+                    imagePreview.setImage(image);
+                    imagePreviewBox.setVisible(true);
+                    imagePreviewBox.setManaged(true);
+                    return;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        // If we get here, either the path is empty or the file doesn't exist
+        imagePreview.setImage(null);
+        imagePreviewBox.setVisible(false);
+        imagePreviewBox.setManaged(false);
     }
 }
