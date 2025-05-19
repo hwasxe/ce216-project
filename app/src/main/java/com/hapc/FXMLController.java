@@ -4,13 +4,14 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
+import javafx.stage.Window;
 
+import java.io.File;
 import java.util.List;
+
 
 public class FXMLController {
 
@@ -60,7 +61,11 @@ public class FXMLController {
     private Button deleteButton;
 
     @FXML
-    private Button saveButton;
+    private Button importButton;
+
+    @FXML
+    private Button exportButton;
+
 
     @FXML
     private TextField artifactIdField;
@@ -175,14 +180,6 @@ public class FXMLController {
             }
         });
 
-        saveButton.setOnAction(event -> {
-            try {
-                JSONManager.save(allArtifacts);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
-
         submitButton.setOnAction(event -> {
             if (editing && artifactBeingEdited != null) {
                 updateArtifact(artifactBeingEdited);
@@ -200,6 +197,10 @@ public class FXMLController {
             clearInputs();
             showForm(false);
         });
+
+        importButton.setOnAction(e -> importJson());
+        exportButton.setOnAction(e -> saveJson());
+
     }
 
     private void performSearch() {
@@ -210,8 +211,15 @@ public class FXMLController {
             List<Artifact> filtered = allArtifacts.stream().filter(a ->
                     a.getArtifactId().toLowerCase().contains(keyword) ||
                             a.getArtifactName().toLowerCase().contains(keyword) ||
+                            a.getCategory().toLowerCase().contains(keyword) ||
                             a.getCivilization().toLowerCase().contains(keyword) ||
-                            a.getCategory().toLowerCase().contains(keyword)
+                            a.getDiscoveryLocation().toLowerCase().contains(keyword) ||
+                            a.getComposition().toLowerCase().contains(keyword) ||
+                            a.getDiscoveryDate().toLowerCase().contains(keyword) ||
+                            a.getCurrentPlace().toLowerCase().contains(keyword) ||
+                            a.getDimensions().toLowerCase().contains(keyword) ||
+                            a.getWeight().toLowerCase().contains(keyword) ||
+                            a.getTags().toLowerCase().contains(keyword)
             ).toList();
             artifacts.setAll(filtered);
         }
@@ -279,6 +287,53 @@ public class FXMLController {
         artifact.setWeight(weightField.getText());
         artifact.setTags(tagsField.getText());
     }
+
+    private void importJson() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Import Artifact JSON");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JSON Files", "*.json"));
+
+        File file = fileChooser.showOpenDialog(getWindow());
+        if (file != null) {
+            try {
+                List<Artifact> imported = JSONManager.load(file);
+                allArtifacts.clear();
+                artifacts.clear();
+                allArtifacts.addAll(imported);
+                artifacts.addAll(imported);
+            } catch (Exception e) {
+                showAlert("Failed to import JSON:\n" + e.getMessage());
+            }
+        }
+    }
+
+    private void saveJson() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Export Artifact JSON");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JSON Files", "*.json"));
+        fileChooser.setInitialFileName("artifact-catalog.json");
+
+        File file = fileChooser.showSaveDialog(getWindow());
+        if (file != null) {
+            try {
+                JSONManager.save(allArtifacts, file);
+            } catch (Exception e) {
+                showAlert("Failed to export JSON:\n" + e.getMessage());
+            }
+        }
+    }
+
+    private Window getWindow() {
+        return artifactTable.getScene().getWindow();
+    }
+
+    private void showAlert(String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
 
 }
 

@@ -43,7 +43,9 @@
                 <Button text="Add" fx:id="addButton"/>
                 <Button text="Edit" fx:id="editButton"/>
                 <Button text="Delete" fx:id="deleteButton"/>
-                <Button text="Save" fx:id="saveButton"/>
+                <Button text="Import JSON" fx:id="importButton"/>
+                <Button text="Save as JSON" fx:id="exportButton"/>
+
             </HBox>
 
             <VBox fx:id="formPanel" spacing="10" visible="false" managed="false">
