@@ -34,12 +34,6 @@ public class Artifact {
         this.imagePath = imagePath;
     }
 
-    public Artifact(String artifactId, String artifactName, String category, String civilization, String discoveryLocation, String composition,
-                    String discoveryDate, String currentPlace, String dimensions, String weight, String tags) {
-        this(artifactId, artifactName, category, civilization, discoveryLocation, composition,
-                discoveryDate, currentPlace, dimensions, weight, tags, "");
-    }
-
     public String getImagePath() { return imagePath; }
     public void setImagePath(String imagePath) { this.imagePath = imagePath; }
 
