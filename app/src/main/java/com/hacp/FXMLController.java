@@ -522,7 +522,8 @@ public class FXMLController {
                         "- Add: Click the 'Add' button to create a new artifact entry\n" +
                         "- Edit: Select an artifact from the table and click 'Edit'\n" +
                         "- Delete: Select an artifact and click 'Delete' to remove it\n" +
-                        "- Save: Click 'Save' to save all changes to the catalog file\n\n" +
+                        "- Save: Click 'Save' to save all changes to the current catalog file\n" +
+                        "- Double click on artifact for details\n\n" +
                         "SEARCH:\n" +
                         "- Use the search box at the top to filter artifacts by any field\n" +
                         "- The search works across all properties including tags\n\n" +
@@ -537,7 +538,10 @@ public class FXMLController {
                         "- Current Place: Current location (museum, collection, etc.)\n" +
                         "- Dimensions: Physical size of the artifact\n" +
                         "- Weight: Weight of the artifact\n" +
-                        "- Tags: Keywords to categorize and search for artifacts"
+                        "- Tags: Keywords to categorize and search for artifacts\n\n" +
+                        "FILE TAB :\n" +
+                        "- Import JSON : For importing proper JSON files as catalog\n" +
+                        "- Export as JSON : Exporting current catalog to any place you want\n"
         );
 
         VBox.setVgrow(helpText, Priority.ALWAYS);
@@ -590,7 +594,6 @@ public class FXMLController {
                 throw new Exception("No user image set");
             }
         } catch (Exception ex) {
-            // Fallback: load placeholder from resources
             image = new Image(getClass().getResource("/images/placeholder.png").toExternalForm());
         }
 
@@ -599,7 +602,7 @@ public class FXMLController {
         imageView.setPreserveRatio(true);
         layout.getChildren().add(imageView);
 
-        
+
         Scene scene = new Scene(layout, 500, 600);
         detailStage.setScene(scene);
         detailStage.initModality(Modality.APPLICATION_MODAL); // focus'u kilitle

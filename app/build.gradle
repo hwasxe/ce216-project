@@ -44,13 +44,19 @@ javafx {
 }
 
 jlink {
-    options = ['--strip-debug', '--compress', '2', '--no-header-files', '--no-man-pages']
+    moduleName = 'com.hacp'
+
     launcher {
         name = 'CatalogApp'
+    }
+
+    jpackage {
+        imageName = 'ArtifactCatalogApp'
     }
 }
 
 application {
     // Define the main class for the application.
     mainClass = 'com.hacp.MainApp'
+    mainModule = 'com.hacp'
 }

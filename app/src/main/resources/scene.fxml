@@ -101,7 +101,6 @@
 
                     <Label text="Tags:" GridPane.rowIndex="10" GridPane.columnIndex="0"/>
                     <TextField fx:id="tagsField" GridPane.rowIndex="10" GridPane.columnIndex="1"/>
-                    <Label text="Image:" GridPane.rowIndex="11" GridPane.columnIndex="0"/>
                     <Label text="Select Image:" GridPane.rowIndex="11" GridPane.columnIndex="0"/>
                     <Button text="Select Image" fx:id="imageSelectButton" GridPane.rowIndex="11" GridPane.columnIndex="1"/>
                     <Label fx:id="imagePathLabel"

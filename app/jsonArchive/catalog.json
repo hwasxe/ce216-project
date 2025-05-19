@@ -11,17 +11,4 @@
   "weight" : "~1.5 tons",
   "tags" : "alexander the great, sarcophagus, hellenistic art",
   "imagePath" : "src/main/resources/images/Alexander_Sarcophagus.jpg"
-}, {
-  "artifactId" : "",
-  "artifactName" : "",
-  "category" : "",
-  "civilization" : "",
-  "discoveryLocation" : "",
-  "composition" : "",
-  "discoveryDate" : "",
-  "currentPlace" : "",
-  "dimensions" : "",
-  "weight" : "",
-  "tags" : "",
-  "imagePath" : "images/Alexander_Sarcophagus.jpg"
 } ]
