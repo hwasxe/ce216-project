@@ -14,9 +14,25 @@
 
     <center>
         <VBox spacing="10" style="-fx-padding: 10;">
+            <MenuBar>
+                <menus>
+                    <Menu text="File">
+                        <items>
+
+                        </items>
+                    </Menu>
+                    <Menu text="Help">
+                        <items>
+                            <MenuItem text="User Manual" onAction="#showHelp"/>
+                        </items>
+                    </Menu>
+                </menus>
+            </MenuBar>
             <HBox spacing="10" alignment="CENTER_LEFT">
                 <TextField fx:id="searchField" promptText="Search by tags..." HBox.hgrow="ALWAYS"/>
                 <Button text="Search" fx:id="searchButton"/>
+                <Button text="Filter by Tags" fx:id="tagFilterButton"/>
+                <Label fx:id="activeFiltersLabel" text="Active filters: None" />
             </HBox>
 
             <TableView fx:id="artifactTable" VBox.vgrow="ALWAYS">
